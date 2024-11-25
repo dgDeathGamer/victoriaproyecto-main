@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/editar_producto.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="container">
+        <h1>Editar Producto: {{ producto.nombre }}</h1>
+        
+        <!-- Muestra el precio actual en pesos chilenos como referencia -->
+        <p>Precio actual: ${{ producto.precio|floatformat:0 }} CLP</p>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_nombre">Nombre:</label>
+                {{ form.nombre }}
+            </div>
+            <div class="form-group">
+                <label for="id_precio">Precio (CLP):</label>
+                {{ form.precio }}
+            </div>
+            <div class="form-group">
+                <label for="id_stock">Cantidad en Stock:</label>
+                {{ form.stock }}
+            </div>
+            <div class="form-group">
+                <label for="id_stock_minimo">Stock Mínimo:</label>
+                {{ form.stock_minimo }}
+            </div>
+            
+            <!-- Visualización de la imagen actual del producto -->
+            {% if producto.imagen %}
+                <div class="product-image">
+                    <label>Imagen actual del Producto:</label>
+                    <div class="image-container">
+                        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                    </div>
+                </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="id_imagen">Modificar Imagen:</label>
+                {{ form.imagen }}
+            </div>
+            
+            <div class="button-group">
+                <button type="submit" class="btn-save">Guardar cambios</button>
+                <a href="{% url 'inventario' %}" class="btn-cancel">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+    <style>
+        /* Ocultar la etiqueta y enlace "Actualmente:" y la opción "Limpiar" */
+        .form-control-file .clearablefileinput, 
+        .form-control-file label[for=id_imagen_clear] {
+            display: none;
+        }
+    </style>
+{% endblock content %}
